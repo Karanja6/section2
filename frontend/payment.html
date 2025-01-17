@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Process Payment</h1>
+
+    <!-- Payment Form Section -->
+    <div class="payment-form">
+        <form id="paymentForm">
+            <input type="hidden" id="orderId" name="orderId">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" placeholder="Amount" required>
+
+            <label for="paymentStatus">Payment Status:</label>
+            <select id="paymentStatus" name="paymentStatus" required>
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+            </select>
+
+            <button type="submit">Submit Payment</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    // Retrieve the order ID from the query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+    document.getElementById('orderId').value = orderId;
+
+    // Handle Payment Form submission
+    document.getElementById('paymentForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const orderId = document.getElementById('orderId').value;
+        const amount = document.getElementById('amount').value;
+        const paymentStatus = document.getElementById('paymentStatus').value;
+
+        const paymentData = { orderId, amount, paymentStatus };
+
+        try {
+            const response = await fetch('http://localhost:3000/processPayment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(paymentData)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+                // Optionally redirect back to the orders page or show confirmation
+            } else {
+                alert('Error processing payment: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error processing payment:', error);
+            alert('Error processing payment. Please try again later.');
+        }
+    });
+</script>
+
+</body>
+</html>

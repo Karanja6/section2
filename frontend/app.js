@@ -27,7 +27,7 @@ function renderOrders(orders) {
             <td>${order.order_status}</td>
             <td>${order.payment_status}</td>
             <td>
-                <button onclick="showPaymentForm(${order.order_id})">Process Payment</button>
+                <button onclick="redirectToPaymentPage(${order.order_id})">Process Payment</button>
             </td>
         `;
         ordersTableBody.appendChild(row);
@@ -63,49 +63,10 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
     }
 });
 
-// Show the payment form for a selected order
-function showPaymentForm(orderId) {
-    document.getElementById('orderId').value = orderId;
-
-    // Generate a Payment ID dynamically (e.g., based on timestamp or UUID)
-    const paymentId = 'PAY' + Date.now();  // Simple example using timestamp
-    document.getElementById('paymentId').value = paymentId;
-
-    // Show the payment form
-    document.querySelector('.payment-form').classList.remove('hidden');
+// Redirect to the payment page for a selected order
+function redirectToPaymentPage(orderId) {
+    window.location.href = `payment.html?orderId=${orderId}`;
 }
-
-// Handle Payment Form submission
-document.getElementById('paymentForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const orderId = document.getElementById('orderId').value;
-    const paymentId = document.getElementById('paymentId').value;
-    const amount = document.getElementById('amount').value;
-    const paymentStatus = document.getElementById('paymentStatus').value;
-
-    const paymentData = { orderId, paymentId, amount, paymentStatus };
-
-    try {
-        const response = await fetch('http://localhost:3000/processPayment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(paymentData)
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            alert(result.message);
-            fetchOrders(); // Reload orders list
-            document.querySelector('.payment-form').classList.add('hidden'); // Hide payment form
-        } else {
-            alert('Error processing payment: ' + result.message);
-        }
-    } catch (error) {
-        console.error('Error processing payment:', error);
-        alert('Error processing payment. Please try again later.');
-    }
-});
 
 // Toggle visibility of orders table
 document.getElementById('showOrdersBtn').addEventListener('click', function() {

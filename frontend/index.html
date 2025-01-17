@@ -22,7 +22,6 @@
             <select id="orderStatus" name="orderStatus" required>
                 <option value="Pending">Pending</option>
                 <option value="Shipped">Shipped</option>
-                <!-- Additional statuses can be added here -->
             </select>
 
             <button type="submit">Place Order</button>
@@ -51,27 +50,6 @@
                 <!-- Orders will be dynamically populated here -->
             </tbody>
         </table>
-    </div>
-
-    <!-- Payment Form Section (only shown after selecting an order) -->
-    <div class="payment-form hidden">
-        <h2>Process Payment</h2>
-        <form id="paymentForm">
-            <!-- Hidden Fields for Order ID and Payment ID -->
-            <input type="hidden" id="orderId" name="orderId">
-            <input type="hidden" id="paymentId" name="paymentId">
-
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" placeholder="Amount" required>
-
-            <label for="paymentStatus">Payment Status:</label>
-            <select id="paymentStatus" name="paymentStatus" required>
-                <option value="Paid">Paid</option>
-                <option value="Unpaid">Unpaid</option>
-            </select>
-
-            <button type="submit">Submit Payment</button>
-        </form>
     </div>
 
 </div>
