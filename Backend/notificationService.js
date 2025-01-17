@@ -9,7 +9,6 @@ async function receiveNotification(notificationDetails) {
     const { recipient, content } = notificationDetails.message;
     console.log(`Notification sent to ${recipient}: ${content}`);
 }
-
 async function startNotificationService() {
     try {
         const connection = await amqp.connect('amqp://localhost');  

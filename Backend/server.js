@@ -23,7 +23,6 @@ pool.query('SELECT 1', (err) => {
   }
   console.log('Database connected successfully');
 });
-
 app.post('/placeOrder', async (req, res) => {
     const { customerName, product, quantity } = req.body;
     console.log("Received order data:", { customerName, product, quantity });
@@ -41,15 +40,14 @@ app.post('/placeOrder', async (req, res) => {
             customerName,
             product,
             orderStatus: 'Unpaid',
-            paramOne: 'someValueOne',   
-            paramTwo: 'someValueTwo'   
+            paramOne: 'someValueOne',
+            paramTwo: 'someValueTwo'
         };
 
-        console.log("Order details to be sent to the queue:", orderDetails);
+        console.log(`Order placed and sent to queue with Order ID: ${orderId}`);
 
         try {
             await sendOrderToQueue(orderDetails);
-            console.log(`Order placed and sent to queue with Order ID: ${orderId}`);
         } catch (error) {
             console.error('Error sending order to queue:', error);
             return res.status(500).json({ message: 'Error sending order to queue', error });

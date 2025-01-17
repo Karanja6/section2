@@ -1,4 +1,3 @@
-// Fetch and display existing orders from the backend
 async function fetchOrders() {
     try {
         const response = await fetch('http://localhost:3000/orders');
@@ -12,12 +11,9 @@ async function fetchOrders() {
         alert('Failed to fetch orders. Please try again later.');
     }
 }
-
-// Render orders into the table
 function renderOrders(orders) {
     const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
-    ordersTableBody.innerHTML = ''; // Clear existing rows
-
+    ordersTableBody.innerHTML = ''; 
     orders.forEach(order => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -33,8 +29,6 @@ function renderOrders(orders) {
         ordersTableBody.appendChild(row);
     });
 }
-
-// Handle Order Form submission to create a new order
 document.getElementById('orderForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
@@ -62,21 +56,15 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
         alert('Error placing order. Please try again later.');
     }
 });
-
-// Redirect to the payment page for a selected order
 function redirectToPaymentPage(orderId) {
     window.location.href = `payment.html?orderId=${orderId}`;
 }
-
-// Toggle visibility of orders table
 document.getElementById('showOrdersBtn').addEventListener('click', function() {
     const ordersTable = document.getElementById('ordersTable');
-
-    // Check if the table is currently hidden
     if (ordersTable.style.display === 'none' || ordersTable.style.display === '') {
-        fetchOrders();  // Fetch the orders and display them
-        ordersTable.style.display = 'table';  // Make the orders table visible
+        fetchOrders(); 
+        ordersTable.style.display = 'table'; 
     } else {
-        ordersTable.style.display = 'none';  // Hide the orders table
+        ordersTable.style.display = 'none'; 
     }
 });

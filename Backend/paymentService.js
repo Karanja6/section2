@@ -1,7 +1,6 @@
 const express = require('express');
 const amqp = require('amqplib');
 const { pool } = require('./db');
-
 async function processPayment(orderDetails, ch, msg) {
     console.log("Processing payment for order:", orderDetails);
 
@@ -18,7 +17,7 @@ async function processPayment(orderDetails, ch, msg) {
                 (err) => {
                     if (err) {
                         console.error("Error processing payment:", err);
-                        ch.nack(msg, false, true); 
+                        ch.nack(msg, false, true);
                         console.log('Message requeued due to payment processing error');
                         return;
                     }
@@ -36,6 +35,23 @@ async function processPayment(orderDetails, ch, msg) {
         ch.nack(msg, false, true);  
         console.log('Message requeued due to payment processing failure');
     }
+}
+
+function sendNotification(orderDetails, ch) {
+    if (!ch) {
+        console.error("Error: Channel is undefined when sending notification.");
+        return;
+    }
+
+    const notificationMessage = {
+        message: {
+            recipient: orderDetails.customerName,
+            content: `Payment processed for Order ID: ${orderDetails.orderId}, Status: Paid`
+        }
+    };
+
+    ch.sendToQueue('notificationQueue', Buffer.from(JSON.stringify(notificationMessage)));
+    console.log('Notification message sent:', notificationMessage);
 }
 
 function sendNotification(orderDetails, ch) {
@@ -130,6 +146,7 @@ async function sendOrderToQueue(order) {
         console.error('Error in sending order to queue:', error);
     }
 }
+module.exports = { processOrderFromQueue };
 app.listen(5001, () => {
     console.log('Order Service is running on http://localhost:5001');
 });

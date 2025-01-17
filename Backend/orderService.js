@@ -1,7 +1,6 @@
 const express = require('express');
 const amqp = require('amqplib');
 const { pool } = require('./db'); 
-
 async function sendOrderToQueue(order) {
     try {
         const connection = await amqp.connect('amqp://localhost');
